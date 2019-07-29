@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Users">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="fname" jdbcType="VARCHAR" property="fname" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="rtime" jdbcType="TIMESTAMP" property="rtime" />
+    <result column="isadmin" jdbcType="CHAR" property="isadmin" />
+    <result column="isforbid" jdbcType="CHAR" property="isforbid" />
+    <result column="isable" jdbcType="CHAR" property="isable" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="idcard" jdbcType="VARCHAR" property="idcard" />
+    <result column="headimg" jdbcType="VARCHAR" property="headimg" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="paypwd" jdbcType="VARCHAR" property="paypwd" />
+    <result column="paymoney" jdbcType="DOUBLE" property="paymoney" />
+    <result column="share_code" jdbcType="VARCHAR" property="shareCode" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, fname, phone, email, password, rtime, isadmin, isforbid, isable, name, idcard, 
+    headimg, introduce,paymoney,paypwd,shareCode
+  </sql>
+  <insert id="insertUsers" parameterType="com.zcw.model.Users">
+    insert into users (fname, phone,
+      email, password
+      )
+    values (#{users.fname}, #{users.phone},
+      #{users.email}, #{users.password}
+      )
+  </insert>
+  <select id="findByName" resultMap="BaseResultMap">
+      select * from users where phone= #{name} or email = #{name} and password =#{password}
+  </select>
+    <select id="getPhoneAndEmail" resultMap="BaseResultMap">
+        select * from users where phone= #{phone} or email = #{email}
+    </select>
+  <select id="findUserById" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from users where id = #{id}
+  </select>
+    <select id="findUserByPhone" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"></include> from users where phone = #{phone}
+    </select>
+    <update id="updatePayMoney">
+        update users set paymoney = paymoney - #{paymoney}
+    </update>
+  <select id="findUserByIdAndCard" resultType="com.zcw.model.Users">
+    select <include refid="Base_Column_List"/> from users where id = #{id} and idcard =#{idcard} and paypwd = #{paypwd};
+  </select>
+  <update id="updateShareCode">
+    update users set shareCode = #{code}
+  </update>
+  <select id="findByLoginName" resultType="com.zcw.model.Users">
+    select <include refid="Base_Column_List"/> from users where phone = #{name} or email = #{name}
+  </select>
+  <update id="updatePassword">
+    update users set password = #{password} where phone = #{name} or email = #{name}
+  </update>
+  <select id="displayAlluser" resultType="com.zcw.model.Users">
+    select <include refid="Base_Column_List"/> from users
+  </select>
+  <update id="updateUser">
+    update users set isforbid = #{forbid}
+    where id = #{id}
+  </update>
+
+  <update id="updateUserByIsAble">
+    update users set isable = #{isAble}
+    where id = #{id}
+  </update>
+  <update id="updateUserInformation" parameterType="com.zcw.model.Users">
+    update users
+    <set>
+      <if test="users.fname != null and users.password !=''">
+        fname = #{users.fname},
+      </if>
+      <if test="users.password != null and users.password !=''">
+        password = #{users.password},
+      </if>
+      <if test="users.idcard != null and users.idcard !=''">
+        idcard = #{users.idcard},
+      </if>
+      <if test="users.headimg != null and users.headimg !=''">
+          headimg = #{users.headimg},
+      </if>
+      <if test="users.paypwd != null and users.paypwd !=''">
+        paypwd = #{users.paypwd},
+      </if>
+      <if test="users.introduce != null and users.introduce !=''">
+        introduce = #{users.introduce},
+      </if>
+      <if test="users.email != null and users.email !=''">
+        email = #{users.email},
+      </if>
+    </set>
+    where id = #{users.id}
+  </update>
+</mapper>

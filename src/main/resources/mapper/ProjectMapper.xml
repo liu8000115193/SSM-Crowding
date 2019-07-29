@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.ProjectMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Project">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="typeid" jdbcType="INTEGER" property="typeid" />
+    <result column="kindid" jdbcType="INTEGER" property="kindid" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="detail" jdbcType="VARCHAR" property="detail" />
+    <result column="detailvido" jdbcType="VARCHAR" property="detailvido" />
+    <result column="rule" jdbcType="VARCHAR" property="rule" />
+    <result column="image" jdbcType="VARCHAR" property="image" />
+    <result column="imagelist" jdbcType="VARCHAR" property="imagelist" />
+    <result column="needmoney" jdbcType="DOUBLE" property="needmoney" />
+    <result column="supmoney" jdbcType="DOUBLE" property="supmoney" />
+    <result column="backmoney" jdbcType="DOUBLE" property="backmoney" />
+    <result column="backcontent" jdbcType="VARCHAR" property="backcontent" />
+    <result column="backimage" jdbcType="VARCHAR" property="backimage" />
+    <result column="backtime" jdbcType="INTEGER" property="backtime" />
+    <result column="sendmoney" jdbcType="DOUBLE" property="sendmoney" />
+    <result column="statue" jdbcType="VARCHAR" property="statue" />
+    <result column="startdate" jdbcType="TIMESTAMP" property="startdate" />
+    <result column="deadline" jdbcType="TIMESTAMP" property="deadline" />
+    <result column="isable" jdbcType="CHAR" property="isable" />
+    <result column="isticket" jdbcType="CHAR" property="isticket" />
+    <result column="isforbid" jdbcType="CHAR" property="isforbid" />
+    <result column="numsup" jdbcType="INTEGER" property="numsup" />
+    <result column="numcol" jdbcType="INTEGER" property="numcol" />
+    <result column="backtype" jdbcType="VARCHAR" property="backtype" />
+      <result column="shen_he" jdbcType="VARCHAR" property="shenHe" />
+    <association property="user" javaType="com.zcw.model.Users">
+      <id property="id" column="userid"/>
+      <result property="fname" column="fname"/>
+    </association>
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, typeid, kindid, name, introduce, detail, detailvido, rule, image, imagelist, 
+    needmoney, supmoney, backmoney, backcontent, backimage, backtime, sendmoney, statue, 
+    startdate, deadline, isable, isticket, isforbid, numsup, numcol, backtype
+  </sql>
+  <select id="findHostProject" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"></include> from project
+  </select>
+  <select id="findById" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"></include> from project where id = #{id}
+  </select>
+  <select id="findProjectDeatilById" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"></include> from project where id = #{id}
+  </select>
+  <select id="findProjectByKeyword" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"></include> from project where introduce like #{keyword}
+  </select>
+  <select id="findProjectByUserid" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"></include> from project where userid = #{id}
+  </select>
+  <insert id="addProject" parameterType="com.zcw.model.Project">
+    insert into project(userid, typeid, kindid, name, introduce, detailvido, rule, image, imagelist,
+    needmoney, backmoney, backcontent, backimage, backtime, sendmoney, deadline, isticket,backtype)
+    values(#{userid},#{typeid},#{kindid},#{name},#{introduce},#{detailvido},#{rule},#{image},#{imagelist},#{needmoney},
+    #{backmoney},#{backcontent},#{backimage},#{backtime},#{sendmoney},#{deadline},
+    #{isticket},#{backtype})
+  </insert>
+  <select id="sortProject" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"></include> from project where isforbid = '否' and isable = '是'
+    <if test="keyword != null and keyword!=''">
+      and introduce like "%"#{keyword}"%"
+    </if>
+    <if test="state=='byIngState'">
+      and statue = '众筹中'
+    </if>
+    <if test="state=='byStartSate'">
+      and statue = '即将开始'
+    </if>
+    <if test="state=='byOKSate'">
+      and statue = '众筹成功'
+    </if>
+    <if test="sort=='byTime'">
+      order by startdate desc
+    </if>
+    <if test="sort=='byMoney'">
+      order by supmoney desc
+    </if>
+    <if test="sort=='bySup'">
+      order by numsup desc
+    </if>
+    <if test="sort=='byCol'">
+      order by numcol desc
+    </if>
+    limit ${(toPage-1)*6},${toPage*6}
+  </select>
+  <select id="getAllProject" resultType="java.lang.Integer">
+    select count(*) from project
+  </select>
+  <select id="findAllProject" resultType="com.zcw.model.Project">
+    select <include refid="Base_Column_List"/> from project where shen_he = '已通过'
+  </select>
+  <select id="findProjectByAdmin" resultMap="BaseResultMap">
+    select * from project p join users u on p.userid = u.id and p.isforbid = '否'
+  </select>
+    <update id="shenHeProject">
+        update project set shen_he = #{shenHe} where id = #{id}
+    </update>
+    <update id="deleteProject">
+        update project set isforbid = '是' where id = #{id}
+    </update>
+</mapper>

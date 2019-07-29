@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.AddressMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Address">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="consignee" jdbcType="VARCHAR" property="consignee" />
+    <result column="telephone" jdbcType="VARCHAR" property="telephone" />
+    <result column="postcard" jdbcType="VARCHAR" property="postcard" />
+    <result column="detailaddress" jdbcType="VARCHAR" property="detailaddress" />
+    <result column="isdefault" jdbcType="VARCHAR" property="isdefault" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, consignee, telephone, postcard, detailaddress,isdefault,province,city,county
+  </sql>
+  <insert id="insertAddress">
+    insert into address(userid, consignee, telephone, postcard, detailaddress, province, city, county) values (
+    #{userid},#{consignee},#{telephone},#{postcard},#{detailaddress},#{province},#{city},#{county})
+  </insert>
+  <select id="findAddressByUserid" resultType="com.zcw.model.Address">
+    select <include refid="Base_Column_List"/> from address where userid = #{id}
+  </select>
+  <delete id="deleteAddress">
+    delete from address where id =#{id}
+  </delete>
+  <update id="setDeafultAddress">
+    update address set isdefault = '是' where id = #{id}
+  </update>
+  <update id="setNotDeafultAddress">
+    update address set isdefault = '否' where id = #{id}
+  </update>
+  <update id="updateAddress">
+    update address
+    <trim prefix="set" suffixOverrides=",">
+      <if test="userid!=null">userid=#{userid},</if>
+      <if test="consignee!=null">consignee=#{consignee},</if>
+      <if test="telephone!=null">telephone=#{telephone},</if>
+      <if test="postcard!=null">postcard=#{postcard},</if>
+      <if test="detailaddress!=null">detailaddress=#{detailaddress},</if>
+      <if test="province!=null">province=#{province},</if>
+      <if test="city!=null">city=#{city},</if>
+      <if test="county!=null">county=#{county},</if>
+      <if test="isdefault!=null">isdefault=#{isdefault},</if>
+    </trim>
+    WHERE id=#{id}
+  </update>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.OrderMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Order">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="addressid" jdbcType="INTEGER" property="addressid" />
+    <result column="projectid" jdbcType="INTEGER" property="projectid" />
+    <result column="paytype" jdbcType="VARCHAR" property="paytype" />
+    <result column="paymoney" jdbcType="DOUBLE" property="paymoney" />
+    <result column="ispay" jdbcType="VARCHAR" property="ispay" />
+  </resultMap>
+
+  <insert id="insertOrder" parameterType="com.zcw.model.Order">
+    insert into `order` (userid, addressid, projectid, paytype, paymoney) values
+    (#{order.userid}, #{order.addressid}, #{order.projectid}, #{order.paytype}, #{order.paymoney});
+    insert into support(userid,projectid,money,share_id,share_code) values (#{order.userid},#{order.projectid},#{order.paymoney},#{code},#{order.invitecode});
+    update users set paymoney = paymoney - #{order.paymoney} where id = #{order.userid};
+    update project set supmoney = supmoney+#{order.paymoney},
+      numsup = numsup+1 where id = #{order.projectid}
+  </insert>
+</mapper>

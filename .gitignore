@@ -1,0 +1,52 @@
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+### Example user template template
+### Example user template
+
+# IntelliJ project files
+.idea
+*.iml
+out
+gen
+logs/
+src/main/java/com/zcw/model/SupportVO.java
+src/main/java/com/zcw/util/FileUpload.java
+src/main/webapp/WEB-INF/views/error/
+src/main/webapp/css/dropzone.css
+src/main/webapp/images/baner.jpg
+src/main/webapp/images/computer.jpg
+src/main/webapp/images/gongyi1.jpg
+src/main/webapp/images/gongyi2.jpg
+src/main/webapp/images/gongyi3.jpg
+src/main/webapp/images/gongyi4.jpg
+src/main/webapp/images/jianpan.jpg
+src/main/webapp/images/taishi.jpg
+src/main/webapp/js/dropzone.js
+src/main/webapp/js/jquery-1.9.1.js
+src/main/webapp/js/jquery.validate.js
+src/main/webapp/js/messages_zh.min.js
+src/main/webapp/js/order.js
+src/main/webapp/upload/comment/
+src/main/webapp/upload/tryreport/

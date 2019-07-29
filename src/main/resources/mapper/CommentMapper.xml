@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Comment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="projectid" jdbcType="INTEGER" property="projectid" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="starttime" jdbcType="TIMESTAMP" property="starttime" />
+    <result column="images" jdbcType="VARCHAR" property="images" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, projectid, content, type, starttime, images
+  </sql>
+  <select id="findCommentByProjectId" resultType="com.zcw.model.Comment">
+    select content,images,fname,headimg from comment,users where comment.projectid = #{id} and comment.userid=users.id
+  </select>
+  <insert id="insertComment" parameterType="Comment">
+    insert into comment(userid, projectid, content, images) values
+    (#{comment.userid},#{comment.projectid},#{comment.content},#{comment.images})
+  </insert>
+</mapper>

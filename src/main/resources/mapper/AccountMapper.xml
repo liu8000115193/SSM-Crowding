@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zcw.dao.AccountMapper">
+  <resultMap id="BaseResultMap" type="com.zcw.model.Account">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+    <result column="paypwd" jdbcType="VARCHAR" property="paypwd" />
+    <result column="paymoney" jdbcType="DOUBLE" property="paymoney" />
+    <result column="balance" jdbcType="DOUBLE" property="balance" />
+    <result column="ctime" jdbcType="TIMESTAMP" property="ctime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, userid, paypwd, paymoney, ctime,balance
+  </sql>
+  <select id="findByUserId" resultType="com.zcw.model.Account">
+    select <include refid="Base_Column_List"/> from account where userid = #{id} order by ctime desc
+  </select>
+  <insert id="insert">
+    insert into account(userid, paypwd, paymoney, balance) values (#{id},#{paypwd},#{paymoney},#{money})
+  </insert>
+</mapper>
